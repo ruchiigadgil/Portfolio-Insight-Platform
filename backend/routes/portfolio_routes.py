@@ -52,7 +52,8 @@ def get_user_portfolio(user_name):
                     p.symbol,
                     p.quantity,
                     p.avg_price,
-                    COALESCE(s.price, 0) AS price
+                    COALESCE(s.price, 0) AS price,
+                    MAX(s.timestamp) AS updated
                 FROM portfolios p
                 LEFT JOIN stocks s ON p.symbol = s.symbol
                 WHERE p.user_name = :user_name

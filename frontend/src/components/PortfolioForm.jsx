@@ -9,6 +9,8 @@ export default function PortfolioForm({ onSuccess, userName }) {
     avg_price: "",
   });
 
+  const availableSymbols = ["AAPL", "MSFT", "GOOG", "AMZN", "TSLA", "META"];
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -38,6 +40,10 @@ export default function PortfolioForm({ onSuccess, userName }) {
     borderRadius: "6px",
     fontSize: "14px",
   };
+  const selectStyle = {
+    ...inputStyle,
+    background: "white",
+  };
   const buttonStyle = {
     backgroundColor: "#2b5797",
     color: "white",
@@ -49,14 +55,20 @@ export default function PortfolioForm({ onSuccess, userName }) {
 
   return (
     <form style={formContainer} onSubmit={handleSubmit}>
-      <input
+      <select
         name="symbol"
-        placeholder="Symbol"
         value={form.symbol}
         onChange={handleChange}
-        style={inputStyle}
+        style={selectStyle}
         required
-      />
+      >
+        <option value="">Select Symbol</option>
+        {availableSymbols.map((sym) => (
+          <option key={sym} value={sym}>
+            {sym}
+          </option>
+        ))}
+      </select>
       <input
         name="quantity"
         type="number"

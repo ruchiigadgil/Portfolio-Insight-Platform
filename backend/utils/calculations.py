@@ -13,8 +13,11 @@ def compute_portfolio_summary(portfolio):
         gain = current_value - invested
         gain_percent = (gain / invested * 100) if invested > 0 else 0
 
+        stock["invested"] = round(invested, 2)
+        stock["current"] = round(current_value, 2)
         stock["gain"] = round(gain, 2)
         stock["gain_percent"] = round(gain_percent, 2)
+        # updated is already in stock from query
 
         total_invested += invested
         total_current += current_value
