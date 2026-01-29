@@ -1,131 +1,128 @@
+# 💼 Portfolio Insight Platform
 
-# 💼 Portfolio Insight Platform — Full-Stack Data Engineering System
+### Full-Stack Data Engineering & Analytics Project
 
-A **production-style portfolio management and analytics system** that integrates real-time market data ingestion, backend computation, and rich frontend visualization.
-Built using **React + Flask + AWS RDS (MySQL)** with a **Twelve Data–driven ETL pipeline**, this project showcases a complete data engineering workflow — from data ingestion to insight delivery.
+A **full-stack analytics platform** that demonstrates core **data engineering principles** such as data ingestion, transformation, storage, and downstream consumption through a web application.
 
----
-
-## 🧠 System Overview
-
-This system embodies the **data engineering lifecycle**:
-
-> **Ingestion (ETL)** → **Storage (AWS RDS)** → **Computation (Flask)** → **Visualization (React)**
-
-Each layer operates independently yet synchronously to ensure **accurate, real-time portfolio analytics**.
+The project integrates **real-time financial data ingestion**, backend analytics, and interactive frontend visualization to simulate a **production-style data pipeline** suitable for portfolio tracking and analysis.
 
 ---
 
-## ⚙️ Architecture
+## 🧠 Project Overview
 
-### ☁️ ETL Layer — Automated Data Pipeline
+This project focuses on building a **reliable end-to-end data flow**:
+
+> **API Ingestion → Data Cleaning → Relational Storage → Backend Analytics → Frontend Visualization**
+
+While not a big-data system, the project emphasizes **foundational data engineering concepts** including ETL automation, schema design, data validation, and serving analytical data to downstream applications.
+
+---
+
+## ⚙️ System Architecture
+
+### ☁️ Data Ingestion & ETL Layer
 
 **File:** `etl_pipeline.py`
 
-* Periodically fetches live stock market data from the **Twelve Data API**.
-* Cleanses, validates, and normalizes raw data before writing to the database.
-* Loads results into **AWS RDS (MySQL)** within the `stocks` table.
-* Keeps the backend constantly updated with the **latest market prices**.
+* Periodically fetches live stock market data using the **Twelve Data API**
+* Parses, validates, and normalizes raw API responses
+* Transforms data into a structured format suitable for relational storage
+* Loads cleaned data into a **cloud-hosted relational database**
+* Designed to run continuously at fixed intervals
 
-This pipeline exemplifies a lightweight yet reliable **data ingestion and transformation process** within a cloud environment.
+This layer demonstrates a **lightweight ETL pipeline** commonly used in real-world data systems.
 
 ---
 
-### 🧩 API Layer — Flask Backend
+### 🗄️ Data Storage Layer
 
-**Key Files:**
+* Uses a **relational database (PostgreSQL / MySQL)** accessed via **SQLAlchemy**
+* Stores normalized stock price data and portfolio records
+* Enforces structured schema design for analytical queries
+* Database choice is **interchangeable**, highlighting portability through ORM usage
 
-* `backend/routes/portfolio_routes.py`
-* `backend/routes/stock_routes.py`
-* `backend/utils/calculations.py`
-* `backend/db.py`
+The database acts as the **single source of truth** for analytics and reporting.
+
+---
+
+### 🧩 Backend Analytics Layer (Flask)
+
+**Key Components:**
+
+* `routes/portfolio_routes.py`
+* `routes/stock_routes.py`
+* `utils/calculations.py`
+* `db.py`
 
 **Responsibilities:**
 
-* Exposes REST endpoints consumed by the React frontend (`/api/portfolio`, `/api/add-portfolio`, etc.).
-* Uses **SQLAlchemy ORM** to query AWS RDS for real-time data retrieval.
-* Computes per-user metrics such as **invested value**, **current value**, **P/L**, and **percentage gain**.
-* Serves as the **computational middleware** connecting raw database data with visual analytics.
+* Exposes REST APIs for portfolio and stock data
+* Retrieves processed data from the database using SQLAlchemy
+* Computes analytics such as:
+
+  * Invested value
+  * Current portfolio value
+  * Profit / Loss
+  * Percentage gain
+* Acts as a **data-serving layer**, bridging stored data and frontend visualization
 
 ---
 
-### 🗄️ Data Layer — AWS RDS (MySQL)
+### 💻 Frontend Visualization Layer (React)
 
-* Acts as the **central analytical datastore** for portfolios and stock data.
-* Maintains referential integrity between user positions (`portfolios`) and real-time prices (`stocks`).
-* Optimized for analytical queries via SQLAlchemy’s abstraction layer.
-* Connection logic handled through `backend/db.py`, with schema initialization by `init_db.py`.
+**Key Components:**
 
-> 🟡 *AWS RDS ensures secure, scalable, and always-on storage for financial datasets, forming the backbone of the project’s reliability.*
-
----
-
-### 💻 Frontend Layer — React + Vite Dashboard
-
-**Files:**
-
-* `frontend/src/pages/Dashboard.jsx`
-* `frontend/src/components/PortfolioForm.jsx`
-* `frontend/src/components/PortfolioTable.jsx`
-* `frontend/src/components/PortfolioCharts.jsx`
+* Portfolio dashboard
+* Holdings table
+* Performance charts
 
 **Features:**
 
-* Real-time portfolio visualization synced with Flask’s API.
-* Add or update holdings instantly via `POST /api/add-portfolio`.
-* Interactive tables displaying symbol, quantity, average price, market price, P/L, % gain, and last updated time.
-* Integrated **historical charts** and **composition pie charts** using Recharts and Twelve Data API.
-* Clean, responsive, and intuitive design optimized for financial dashboards.
+* Displays portfolio metrics fetched from backend APIs
+* Allows users to add or update holdings
+* Visualizes portfolio performance using charts and tables
+* Clean and responsive UI suitable for analytical dashboards
+
+The frontend represents the **final data consumption layer** of the pipeline.
 
 ---
 
-## 🔑 Configuration
+## 🔁 Data Flow Summary
 
-All configuration is centralized in the `.env` file at the repository root, including:
-
-* 🗃️ **AWS RDS MySQL connection credentials**
-* 🔑 **Twelve Data API key**
-* ⚙️ **Flask server and environment variables**
-
-This setup ensures a **secure, environment-agnostic configuration**, ideal for multi-stage (dev, test, prod) deployments.
-
----
-
-## 🧮 Data Flow Summary
-
-| Stage         | Component         | Function                                 | Technology              |
-| ------------- | ----------------- | ---------------------------------------- | ----------------------- |
-| Ingestion     | `etl_pipeline.py` | Fetch, clean, and store live data        | Python, Twelve Data API |
-| Storage       | AWS RDS (MySQL)   | Centralize market & portfolio data       | Cloud Database          |
-| Computation   | Flask Backend     | Perform P/L & portfolio analytics        | Python, SQLAlchemy      |
-| Visualization | React Dashboard   | Display charts & analytics interactively | React, Recharts, Axios  |
+| Stage         | Component       | Purpose                        |
+| ------------- | --------------- | ------------------------------ |
+| Ingestion     | Twelve Data API | Fetch live market data         |
+| ETL           | Python pipeline | Clean and normalize data       |
+| Storage       | Relational DB   | Persist structured datasets    |
+| Analytics     | Flask backend   | Compute portfolio metrics      |
+| Visualization | React app       | Display insights interactively |
 
 ---
 
 ## 🧩 Tech Stack
 
-**Frontend:** React (Vite), Axios, Recharts
-**Backend:** Flask, SQLAlchemy
-**Database:** MySQL hosted on AWS RDS
-**ETL:** Python (scheduled data ingestion via Twelve Data API)
-**Hosting (optional):** Render / AWS EC2
-**Config Management:** dotenv (`.env`)
+* **Frontend:** React, Axios, Recharts
+* **Backend:** Flask, SQLAlchemy
+* **Database:** Relational DB (PostgreSQL / MySQL)
+* **ETL:** Python, REST APIs
+* **Configuration:** dotenv
+* **Version Control:** Git
 
 ---
 
-## 📊 Key Highlights
+## 📌 Key Learnings & Highlights
 
-✅ **AWS RDS Integration** — Secure, cloud-hosted MySQL for persistent storage.
-✅ **Automated ETL Pipeline** — Real-time data ingestion & normalization from Twelve Data.
-✅ **Full-Stack Synchronization** — Flask connects backend computation to live frontend visualization.
-✅ **Financial Intelligence** — Computes invested value, P/L, and gain % dynamically.
-✅ **Scalable Architecture** — Each layer (ETL, DB, API, UI) is modular and production-ready.
+* Implemented an **automated ETL pipeline** for real-time data ingestion
+* Designed a **normalized relational schema** for analytical queries
+* Used **ORM-based data access** for portability and maintainability
+* Built a **data-serving backend** that computes derived metrics
+* Delivered insights via a **frontend analytics dashboard**
+* Gained hands-on experience with **end-to-end data workflows**
 
 ---
 
 ## 🧭 Summary
 
-The **Portfolio Insight Platform** demonstrates how a **data engineering pipeline** can evolve into a **complete analytical ecosystem** — connecting **data ingestion**, **transformation**, **storage**, and **visualization** into a seamless user experience.
-
-> 💡 **In essence:** This isn’t just a portfolio tracker — it’s a real-world example of how to build a **cloud-based data engineering architecture** that transforms raw financial data into actionable insights.
+The **Portfolio Insight Platform** is a practical demonstration of how **data engineering concepts integrate with full-stack development**.
+It showcases how raw external data can be ingested, transformed, stored, analyzed, and finally visualized in a structured and reliable manner.
 
